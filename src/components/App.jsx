@@ -16,6 +16,26 @@ export class App extends React.Component {
     filter: '',
   };
 
+  //Контакты cчитываются из локального хранилища и записываются в состояние
+  componentDidMount() {
+    const contacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(contacts);
+
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+    }
+  }
+
+  //При добавлении и удалении контакта, контакты сохраняются в локальное хранилище
+  componentDidUpdate(prevProps, prevState) {
+    console.log('App component did update');
+
+    if (this.state.contacts !== prevState.contacts) {
+      console.log('Обновилось поле contacts');
+      localStorage.setItem('contacts', JSON.stringify(this.state.contacts));
+    }
+  }
+
   // Добавляет контакт в список
   addContact = ({ name, number }) => {
     const normalizedFind = name.toLowerCase();
